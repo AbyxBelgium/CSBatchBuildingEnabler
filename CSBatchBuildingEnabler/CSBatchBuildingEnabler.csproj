@@ -51,6 +51,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CSBatchBuildingEnablerLoading.cs" />
     <Compile Include="CSBatchBuildingEnabler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
