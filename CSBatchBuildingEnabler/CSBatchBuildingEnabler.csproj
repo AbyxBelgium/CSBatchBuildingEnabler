@@ -53,6 +53,7 @@
   <ItemGroup>
     <Compile Include="CSBatchBuildingEnablerLoading.cs" />
     <Compile Include="CSBatchBuildingEnabler.cs" />
+    <Compile Include="CSBatchBuildingEnablerPanelMonitor.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
