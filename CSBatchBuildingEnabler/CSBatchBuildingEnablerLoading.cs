@@ -1,6 +1,8 @@
-﻿using ICities;
+﻿using System.Collections;
+using ICities;
 using UnityEngine;
 using ColossalFramework.UI;
+using ColossalFramework.Globalization;
 using ColossalFramework;
 
 namespace CSBatchBuildingEnabler
@@ -46,19 +48,42 @@ namespace CSBatchBuildingEnabler
             Debug.Log("Initialization has been completed!");
             Debug.Log(button);
 
-            var buildingManager = Singleton<BuildingManager>.instance;
-            var serviceBuildings = buildingManager.GetServiceBuildings(ItemClass.Service.Disaster);
+            button.eventClicked += (component, state) => {
+                var buildingManager = Singleton<BuildingManager>.instance;
 
-            if (serviceBuildings.m_buffer == null || serviceBuildings.m_size > serviceBuildings.m_buffer.Length) {
-                return;
-            }
+                if (!Singleton<BuildingManager>.exists) {
+                    return;
+                }
 
-            for (var index = 0; index < serviceBuildings.m_size; ++index)
-            {
-                var id = serviceBuildings.m_buffer[index];
-                var info = buildingManager.m_buildings.m_buffer[id].Info;
-                var buildingName = info.m_buildingAI.name;
+                var serviceBuildings = buildingManager.GetServiceBuildings(ItemClass.Service.Disaster);
+
+                if (serviceBuildings.m_buffer == null || serviceBuildings.m_size > serviceBuildings.m_buffer.Length) {
+                    return;
+                }
+
+                for (var index = 0; index < serviceBuildings.m_size; ++index) {
+                    var id = serviceBuildings.m_buffer[index];
+                    var building = buildingManager.m_buildings.m_buffer[id];
+                    var info = building.Info;
+
+                    if (info.m_buildingAI.GetType() == typeof(ShelterAI)) {
+                        Singleton<SimulationManager>.instance.AddAction(ToggleBuilding(id, !IsBuildingEnabled(building)));
+                    }
+                }
+            };
+            
+        }
+
+        private bool IsBuildingEnabled(Building building) {
+            return building.m_productionRate != 0;
+        }
+
+        private IEnumerator ToggleBuilding(ushort id, bool value) {
+            if (Singleton<BuildingManager>.exists) {
+                BuildingInfo info = Singleton<BuildingManager>.instance.m_buildings.m_buffer[id].Info;
+                info.m_buildingAI.SetProductionRate(id, ref Singleton<BuildingManager>.instance.m_buildings.m_buffer[id], (byte)(value ? 100 : 0));
             }
+            yield return 0;
         }
     }
 }
