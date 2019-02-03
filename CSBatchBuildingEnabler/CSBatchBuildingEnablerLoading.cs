@@ -17,13 +17,13 @@ namespace CSBatchBuildingEnabler
                 return;
             }
 
-            Debug.Log("BLUB");
 
             ShelterWorldInfoPanel shelterInfoPanel = UIView.library.Get<ShelterWorldInfoPanel>(typeof(ShelterWorldInfoPanel).Name);
             UIButton button = shelterInfoPanel.component.AddUIComponent<UIButton>();
 
             button.width = 200f;
             button.height = 40f;
+
             button.text = "Batch enable/disable";
 
             // Style the button to look like a menu button.
@@ -45,8 +45,6 @@ namespace CSBatchBuildingEnabler
             button.relativePosition = new Vector3(230f, 260f);
 
             batchToggleStateButton = button;
-            Debug.Log("Initialization has been completed!");
-            Debug.Log(button);
 
             button.eventClicked += (component, state) => {
                 var buildingManager = Singleton<BuildingManager>.instance;
@@ -67,15 +65,11 @@ namespace CSBatchBuildingEnabler
                     var info = building.Info;
 
                     if (info.m_buildingAI.GetType() == typeof(ShelterAI)) {
-                        Singleton<SimulationManager>.instance.AddAction(ToggleBuilding(id, !IsBuildingEnabled(building)));
+                        Singleton<SimulationManager>.instance.AddAction(ToggleBuilding(id, !shelterInfoPanel.isCityServiceEnabled));
                     }
                 }
             };
             
-        }
-
-        private bool IsBuildingEnabled(Building building) {
-            return building.m_productionRate != 0;
         }
 
         private IEnumerator ToggleBuilding(ushort id, bool value) {

@@ -11,7 +11,6 @@ namespace CSBatchBuildingEnabler
        
 
         public override void OnUpdate(float realTimeDelta, float simulationTimeDelta) {
-            Debug.Log("ON UPDATE!");
             if (!FindComponents()) {
                 return;
             }
@@ -21,7 +20,6 @@ namespace CSBatchBuildingEnabler
                 
                 // display the right checkbox state  
                 onOffCheckBox.isChecked = Singleton<BuildingManager>.instance.m_buildings.m_buffer[buildingId].m_productionRate != 0; 
-                Debug.Log("IsChecked: " + onOffCheckBox.isChecked);
             }
         }
 
