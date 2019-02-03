@@ -11,8 +11,6 @@ namespace CSBatchBuildingEnabler
         private UIButton batchToggleStateButton;
 
         public override void OnLevelLoaded(LoadMode mode) {
-            Debug.Log("Modifying Shelter Panel!");
-
             if (batchToggleStateButton != null) {
                 return;
             }
